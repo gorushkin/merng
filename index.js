@@ -1,6 +1,7 @@
 import apollo from 'apollo-server';
-import gql from 'graphql-tag';
 import mongoose from 'mongoose';
+import { typeDefs } from './grpahql/typeDefs.js';
+import { resolvers } from './grpahql/resolvers.js';
 
 import dotenv from 'dotenv';
 
@@ -11,30 +12,7 @@ import { Post } from './models/Post.js';
 
 const { ApolloServer } = apollo;
 
-const typeDefs = gql`
-  type Post {
-    id: ID!
-    body: String!
-    createdAt: String!
-    username: String!
-  }
-  type Query {
-    getPosts: [Post]
-  }
-`;
 
-const resolvers = {
-  Query: {
-    async getPosts() {
-      try {
-        const posts = await Post.find();
-        return posts;
-      } catch (error) {
-        throw new Error(error);
-      }
-    },
-  },
-};
 
 const server = new ApolloServer({
   typeDefs,
