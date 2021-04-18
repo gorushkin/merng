@@ -1,18 +1,13 @@
 import apollo from 'apollo-server';
 import mongoose from 'mongoose';
 import { typeDefs } from './grpahql/typeDefs.js';
-import { resolvers } from './grpahql/resolvers.js';
+import resolvers from './grpahql/resolvers/index.js';
 
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { Post } from './models/Post.js';
-// import { User } from './models/User';
-
 const { ApolloServer } = apollo;
-
-
 
 const server = new ApolloServer({
   typeDefs,
