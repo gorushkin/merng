@@ -66,7 +66,7 @@ export default {
       const newUser = new User({
         email,
         username,
-        hashPassword,
+        password: hashPassword,
         createdAt: new Date().toISOString(),
       });
 

@@ -12,6 +12,7 @@ const { ApolloServer } = apollo;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => ({ req }),
 });
 
 const port = 5000;
