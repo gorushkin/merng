@@ -1,5 +1,4 @@
-
-import apolloServer from 'apollo-server';
+import apolloServer, { UserInputError } from 'apollo-server';
 const { AuthenticationError } = apolloServer;
 import { Post } from '../../models/Post.js';
 import checkAuth from '../../utils/check-auth.js';
@@ -39,6 +38,11 @@ export default {
       });
 
       const post = await newPost.save();
+
+      context.pubsub.publish('NEW_POST', {
+        newPost: post,
+      });
+
       return post;
     },
     async deletePost(_, { postId }, context) {
@@ -55,6 +59,28 @@ export default {
       } catch (error) {
         throw new Error(error);
       }
+    },
+    async likePost(_, { postId }, context) {
+      const { username } = checkAuth(context);
+      const post = await Post.findById(postId);
+      console.log('post: ', post);
+
+      if (post) {
+        if (post.likes.find((item) => item.username === username)) {
+          post.likes = post.likes.filter((item) => item.username !== username);
+        } else {
+          post.likes.push({ username, createdAt: new Date().toISOString() });
+        }
+        await post.save();
+        return post;
+      } else {
+        throw new UserInputError('post is not found');
+      }
+    },
+  },
+  Subscription: {
+    newPost: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST'),
     },
   },
 };

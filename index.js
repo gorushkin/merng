@@ -7,12 +7,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { ApolloServer } = apollo;
+const { ApolloServer, PubSub } = apollo;
+
+const pubsub = new PubSub()
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req }),
+  context: ({ req }) => ({ req, pubsub }),
 });
 
 const port = 5000;
