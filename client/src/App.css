@@ -5,3 +5,8 @@
   align-self: center;
   width: 100%;
 }
+
+.form-container {
+  width: 580px;
+  margin: 0 auto;
+}
