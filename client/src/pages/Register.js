@@ -1,41 +1,40 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Form } from 'semantic-ui-react';
 import { useMutation, gql } from '@apollo/client';
+import { useForm } from '../utils/hooks';
 
 const Register = (props) => {
   const [errors, setErrors] = useState([]);
-  const [values, setValues] = useState({
+
+  const initialState = {
     username: '',
     password: '',
     confirmPassword: '',
     email: '',
-  });
+  };
+
+  const { onChange, values, onSubmit } = useForm(registerUser, initialState);
 
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(proxy, result) {
-      console.log(result);
-      props.history.push('/')
+      props.history.push('/');
     },
     onError: (error) => setErrors(error.graphQLErrors[0].extensions.exception.errors),
     variables: values,
   });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  function registerUser() {
     addUser();
-  };
-
-  const onChangeHandler = (e) => {
-    setValues((state) => ({ ...state, [e.target.name]: e.target.value }));
-  };
+  }
 
   return (
     <div className='form-container'>
       <Form onSubmit={onSubmit} className={loading ? 'loading' : ''}>
+        <h1>Register</h1>
         <Form.Input
           label='Username'
           name='username'
-          onChange={onChangeHandler}
+          onChange={onChange}
           value={values.username}
           placeholder='Username'
           type='text'
@@ -44,7 +43,7 @@ const Register = (props) => {
         <Form.Input
           label='Email'
           name='email'
-          onChange={onChangeHandler}
+          onChange={onChange}
           value={values.email}
           placeholder='Email'
           type='text'
@@ -53,7 +52,7 @@ const Register = (props) => {
         <Form.Input
           label='Password'
           name='password'
-          onChange={onChangeHandler}
+          onChange={onChange}
           value={values.password}
           placeholder='Password'
           type='password'
@@ -62,7 +61,7 @@ const Register = (props) => {
         <Form.Input
           label='Repeat password'
           name='confirmPassword'
-          onChange={onChangeHandler}
+          onChange={onChange}
           value={values.confirmPassword}
           placeholder='Repeat password'
           type='password'
