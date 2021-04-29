@@ -6,6 +6,7 @@ import checkAuth from '../../utils/check-auth.js';
 export default {
   Query: {
     async getPosts() {
+      console.log('getPosts');
       try {
         const posts = await Post.find().sort({ createdAt: -1 });
         return posts;
@@ -28,6 +29,7 @@ export default {
   },
   Mutation: {
     async createPost(_, { body }, context) {
+      console.log('createPost');
       const user = checkAuth(context);
 
       if (body.trim() === '') {
@@ -51,7 +53,6 @@ export default {
     },
     async deletePost(_, { postId }, context) {
       const user = checkAuth(context);
-      console.log('user: ', user);
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
@@ -67,7 +68,6 @@ export default {
     async likePost(_, { postId }, context) {
       const { username } = checkAuth(context);
       const post = await Post.findById(postId);
-      console.log('post: ', post);
 
       if (post) {
         if (post.likes.find((item) => item.username === username)) {

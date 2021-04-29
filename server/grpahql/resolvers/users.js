@@ -15,7 +15,6 @@ export default {
         errors.general = 'User is no exist';
         throw new UserInputError('User not found', { errors });
       }
-      console.log('user: ', user);
 
       if (!valid) {
         throw new UserInputError('Errors', { errors });

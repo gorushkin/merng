@@ -12,8 +12,6 @@ import './App.css';
 import 'semantic-ui-css/semantic.min.css';
 
 const App = () => {
-  const context = useContext(AuthContext);
-  console.log('context: ', context);
 
   return (
     <AuthProvider>
